@@ -11,7 +11,7 @@ import java.util.Random;
  */
 public class ArraySort {
     public static void main(String[] args) {
-        int[] array = getRandomArray(10);
+        Integer[] array = getRandomArray(10);
         System.out.println(Arrays.toString(array));
         bubbleSort(array);
         System.out.println(Arrays.toString(array));
@@ -22,7 +22,7 @@ public class ArraySort {
      *
      * @param array массив, который нужно отсортировать
      */
-    public static void bubbleSort(int[] array) {
+    public static void bubbleSort(Integer[] array) {
         for (int i = 0; i < array.length - 1; i++) {
             for (int j = 0; j < array.length - 1 - i; j++) {
                 if (array[j] > array[j + 1]) {
@@ -38,10 +38,10 @@ public class ArraySort {
      * Возвращает массив, размером {@code size} заполненный случайными целыми числами до 100
      *
      * @param size размер массива
-     * @return заполненый массив int
+     * @return заполненый массив
      */
-    public static int[] getRandomArray(int size) {
-        int[] array = new int[size];
+    public static Integer[] getRandomArray(int size) {
+        Integer[] array = new Integer[size];
         Random random = new Random();
         for (int i = 0; i < array.length; i++) {
             array[i] = random.nextInt(101);
