@@ -1,32 +1,35 @@
 package ru.inno.task03;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
-public class MathBox {
-    private Set<Integer> elements;
+public class MathBox<T extends Number> {
+    private Set<T> elements;
     private int id = new Random().nextInt(Integer.MAX_VALUE);
 
-    public MathBox(Integer[] array) {
+    public MathBox(T[] array) {
         elements = new TreeSet<>(Arrays.asList(array));
     }
 
-    public Integer summator() {
-        Integer sum = new Integer(0);
-        for (Integer element : elements) {
-            sum += element;
+    public Number summator() {
+        BigDecimal sum = new BigDecimal(0);
+        for (Number element : elements) {
+            sum = sum.add(new BigDecimal(element.toString()));
         }
-        return sum;
+        return  sum;
     }
 
-    public Set<Integer> splitter(int divider) {
-        Set<Integer> result = new TreeSet<>();
-        for (Integer element : elements) {
-            result.add((element / divider));
+    public Set<T> splitter(T divider) {
+        Set<T> result = new TreeSet<>();
+        for (Number element : elements) {
+            result.add((T)new BigDecimal(element.toString()).divide(new BigDecimal(divider.toString()),
+                    RoundingMode.CEILING));
         }
         return result;
     }
 
-    public void delete(Integer element) {
+    public void delete(T element) {
         elements.remove(element);
     }
 
