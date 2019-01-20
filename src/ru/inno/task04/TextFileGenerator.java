@@ -58,7 +58,11 @@ public class TextFileGenerator {
     }
 
     /**
-     * Возвращает один абзац сгенерированного текста
+     * Возвращает один абзац сгенерированного текста.
+     * В одном абзаце 1<=n3<=20 предложений. В конце абзаца
+     * стоит разрыв строки и перенос каретки.
+     *
+     * @return абзац случайного текста
      */
     private String getParagraph(){
         String paragraph = "";
@@ -71,7 +75,11 @@ public class TextFileGenerator {
     }
 
     /**
-     * Возвращает одно предложение сгенерированного текста
+     * Возвращает одно предложение сгенерированного текста.
+     * Предложение состоит из 1<=n1<=15 слов. В предложении
+     * после произвольных слов могут находиться запятые.
+     *
+     * @return предложение состоящее из случайных слов
      */
     private String getSentence(){
         String sentence = "";
@@ -98,6 +106,9 @@ public class TextFileGenerator {
 
     /**
      * Возвращает знак (.|,|?) которым будет заканчиваться предложение
+     * и знак пробела после него.
+     *
+     * @return символ которым заканчивается предложение и пробел
      */
     private String endOfSentence() {
         char[] endOfSentence = {'.', '!', '?'};
@@ -106,6 +117,8 @@ public class TextFileGenerator {
 
     /**
      * Приводит к верхнему регистру первую букву переданного слова
+     *
+     * @return слово начинающееся с заглавной буквы
      */
     private String firstUpperCase(String word) {
         return word.substring(0, 1).toUpperCase() + word.substring(1);
