@@ -5,7 +5,7 @@ public class Main {
         WordsExtractor wordsExtractor = new WordsExtractor();
         String[] words = wordsExtractor.getWords("c:/temp/dictionary.txt");
         String[] sources = new String[5];
-        for (int i = 0; i <sources.length ; i++) {
+        for (int i = 0; i < sources.length; i++) {
             sources[i] = "c:/temp/task05/" + i + ".txt";
         }
         String res = "c:/temp/task05/finded.txt";
