@@ -3,6 +3,7 @@ package ru.inno.task05;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * Проверяет содержатся ли слова из полученного массива
@@ -28,26 +29,18 @@ public class OccurenciesFinder {
     public void getOccurencies(String[] sources, String[] words, String res) {
         long startTime = System.currentTimeMillis();
         this.filename = res;
-        List<Thread> threadList = new ArrayList<>();
         File file = new File(res);
         if (file.exists()) {
             file.delete();
         }
+        ExecutorService service = Executors.newFixedThreadPool(100);
         for (String word : words) {
             for (String source : sources) {
-                Thread thread = new Thread(new WordChecker(source, word, this));
-                thread.start();
-                threadList.add(thread);
+                service.execute(new Thread(new WordChecker(source, word, this)));
             }
         }
-        for (Thread thread : threadList) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(thread.getName() + " finished");
-        }
+        service.shutdown();
+        while (!service.isTerminated()) ;
         System.out.println("Потрачено: " + ((System.currentTimeMillis() - startTime) / 1000d) + "s");
     }
 
