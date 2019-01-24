@@ -1,6 +1,8 @@
 package ru.inno.task05;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Проверяет содержится ли слово в текстовом файле.
@@ -42,7 +44,9 @@ public class WordChecker implements Runnable {
                 }
                 sentence.append(c);
                 if (c == '.' || c == '!' || c == '?') {
-                    if (sentence.toString().contains(word)) {
+                    //удаляем все знаки пунктуации и разбиваем предложения на слова
+                    List<String> words = Arrays.asList(sentence.toString().replaceAll("\\pP", "").split(" "));
+                    if (words.contains(word)) {
                         sentence = new StringBuilder(sentence.toString().trim());
                         sentence.append("\r\n");
                         occurenciesFinder.writeFile(sentence.toString());
