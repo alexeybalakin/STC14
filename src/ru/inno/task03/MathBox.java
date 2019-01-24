@@ -9,7 +9,7 @@ import java.util.*;
  *
  * @author Alexey Balakin
  */
-public class MathBox<T extends Number> extends ObjectBox<T>{
+public class MathBox<T extends Number & Comparable> extends ObjectBox<T>{
     /**
      * Заполняет внутреннюю коллекцию числами из
      * полученного массива

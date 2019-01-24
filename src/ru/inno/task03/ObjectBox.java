@@ -9,7 +9,7 @@ import java.util.TreeSet;
  *
  * @author Alexey Balakin
  */
-public class ObjectBox<T> {
+public class ObjectBox<T extends Comparable> {
     /**
      * Уникальный индентификатор обьекта, используется
      * в hashCode и equals
