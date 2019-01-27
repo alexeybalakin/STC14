@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 
 /**
@@ -52,6 +53,8 @@ public class Sender extends Thread {
                     }
                 }
             }
+        } catch (SocketException e) {
+            users.remove(this);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

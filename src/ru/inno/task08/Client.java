@@ -23,6 +23,7 @@ public class Client {
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
             DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
             Thread threadReceiver = new Receiver(dataInputStream);
+            threadReceiver.setDaemon(true);
             threadReceiver.start();
             Scanner scanner = new Scanner(System.in);
             while (!message.equals("quit")) {
