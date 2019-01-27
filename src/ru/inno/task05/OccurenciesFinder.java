@@ -18,6 +18,7 @@ public class OccurenciesFinder {
      * Имя файла с результатами поиска.
      */
     private String filename;
+    private static final Object monitor = new Object();
 
     /**
      * В многопоточном режиме ищет слова в массиве текстовых ресурсов.
@@ -51,7 +52,7 @@ public class OccurenciesFinder {
      */
     public void writeFile(String content) {
         try (Writer writer = new FileWriter(filename, true)) {
-            synchronized (this) {
+            synchronized (monitor) {
                 writer.write(content);
             }
         } catch (IOException e) {
