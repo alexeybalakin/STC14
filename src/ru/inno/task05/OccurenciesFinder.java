@@ -1,9 +1,8 @@
 package ru.inno.task05;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Проверяет содержатся ли слова из полученного массива
@@ -34,14 +33,18 @@ public class OccurenciesFinder {
         if (file.exists()) {
             file.delete();
         }
-        ExecutorService service = Executors.newFixedThreadPool(100);
-        for (String word : words) {
-            for (String source : sources) {
-                service.execute(new Thread(new WordChecker(source, word, this)));
-            }
-        }
-        service.shutdown();
-        while (!service.isTerminated()) ;
+        Arrays.stream(words).parallel().map(word -> Arrays.stream(sources).
+                map(source -> new Thread(new WordChecker(source, word, this))).
+                collect(Collectors.toList())).forEach(threads -> {
+            threads.forEach(Thread::start);
+            threads.forEach(thread -> {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
         System.out.println("Потрачено: " + ((System.currentTimeMillis() - startTime) / 1000d) + "s");
     }
 
