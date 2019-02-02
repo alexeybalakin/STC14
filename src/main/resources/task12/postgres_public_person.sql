@@ -1,0 +1,9 @@
+INSERT INTO public.person (id, name, birth_date) VALUES (1, 'Will Smith', '2019-01-30 00:00:00.000000');
+INSERT INTO public.person (id, name, birth_date) VALUES (10, 'Merry Blood', '2019-01-31 00:00:00.000000');
+INSERT INTO public.person (id, name, birth_date) VALUES (6, 'Nils Bor', '2019-01-31 00:00:00.000000');
+INSERT INTO public.person (id, name, birth_date) VALUES (4, 'Andy Serkis', '2019-01-31 00:00:00.000000');
+INSERT INTO public.person (id, name, birth_date) VALUES (5, 'Kozima San', '2019-01-31 00:00:00.000000');
+INSERT INTO public.person (id, name, birth_date) VALUES (8, 'Philip Coen', '2019-01-31 00:00:00.000000');
+INSERT INTO public.person (id, name, birth_date) VALUES (7, 'Samon Hill', '2019-01-31 00:00:00.000000');
+INSERT INTO public.person (id, name, birth_date) VALUES (2, 'Fry McDuck', '2019-01-30 00:00:00.000000');
+INSERT INTO public.person (id, name, birth_date) VALUES (3, 'Peter Parker', '2019-01-31 00:00:00.000000');
