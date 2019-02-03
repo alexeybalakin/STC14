@@ -27,6 +27,7 @@ public class Receiver extends Thread {
                 break;
             } catch (IOException e) {
                 e.printStackTrace();
+                break;
             }
         }
         System.out.println("Receiver shutdown.");
