@@ -1,15 +1,15 @@
 package ru.inno.task05;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.*;
 
 /**
  * Проверяет содержатся ли слова из полученного массива
- * в массиве текстовых ресурсов. Если слово содержится,
- * то предложеие, в котором находится слово добавляется
- * в общий файл с результатами поиска.
+ * в массиве текстовых ресурсов. Для поиска в каждом
+ * ресурсе запускает отдельный поток.
  *
  * @author Alexey Balakin
  */
@@ -17,8 +17,7 @@ public class OccurenciesFinder {
     /**
      * Имя файла с результатами поиска.
      */
-    private String filename;
-    private static final Object monitor = new Object();
+    private static final Logger LOGGER = LoggerFactory.getLogger(OccurenciesFinder.class);
 
     /**
      * В многопоточном режиме ищет слова в массиве текстовых ресурсов.
@@ -29,7 +28,6 @@ public class OccurenciesFinder {
      */
     public void getOccurencies(String[] sources, String[] words, String res) {
         long startTime = System.currentTimeMillis();
-        this.filename = res;
         File file = new File(res);
         if (file.exists()) {
             file.delete();
@@ -37,26 +35,17 @@ public class OccurenciesFinder {
         ExecutorService service = Executors.newFixedThreadPool(100);
         for (String word : words) {
             for (String source : sources) {
-                service.execute(new Thread(new WordChecker(source, word, this)));
+                service.execute(new Thread(new WordChecker(source, word, res)));
             }
         }
         service.shutdown();
-        while (!service.isTerminated()) ;
-        System.out.println("Потрачено: " + ((System.currentTimeMillis() - startTime) / 1000d) + "s");
-    }
-
-    /**
-     * Записывает в файл найденное предложение.
-     *
-     * @param content предложение, в котором содержится искомое слово
-     */
-    public void writeFile(String content) {
-        try (Writer writer = new FileWriter(filename, true)) {
-            synchronized (monitor) {
-                writer.write(content);
+        while (!service.isTerminated()){
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                LOGGER.error("thread was interrupted " + e);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        };
+        LOGGER.info("Потрачено: " + ((System.currentTimeMillis() - startTime) / 1000d) + "s");
     }
 }
