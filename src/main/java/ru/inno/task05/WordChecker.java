@@ -29,58 +29,63 @@ public class WordChecker implements Runnable {
      */
     private String filename;
 
-    public WordChecker(String source, String word, String filename) {
+    private SentenceWriter writer;
+    private ResourceParser parser;
+
+    public WordChecker(String source, String word, String filename, ResourceParser parser, SentenceWriter writer) {
         this.source = source;
         this.word = word;
         this.filename = filename;
+        this.parser = parser;
+        this.writer = writer;
     }
 
     @Override
     public void run() {
-        Set<String> sentences  = getSentences(source);
-        sentences.stream().filter(this::checkSentence).forEach(this::writeFile);
+        Set<String> sentences  = parser.getSentences(source);
+        sentences.stream().filter(this::checkSentence).forEach(sentence -> writer.writeSentence(sentence, filename));
     }
 
-    private Set<String> getSentences(String source) {
-        Set<String> sentences = new HashSet<>();
-        StringBuilder sentence = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(source))) {
-            int i = -1;
-            while ((i = reader.read()) != -1) {
-                char c = (char) i;
-                if (c == '\n' || c == '\r') {
-                    continue;
-                }
-                sentence.append(c);
-                if (c == '.' || c == '!' || c == '?') {
-                    sentences.add(sentence.toString());
-                    sentence = new StringBuilder();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sentences;
-    }
+//    private Set<String> getSentences(String source) {
+//        Set<String> sentences = new HashSet<>();
+//        StringBuilder sentence = new StringBuilder();
+//        try (BufferedReader reader = new BufferedReader(new FileReader(source))) {
+//            int i = -1;
+//            while ((i = reader.read()) != -1) {
+//                char c = (char) i;
+//                if (c == '\n' || c == '\r') {
+//                    continue;
+//                }
+//                sentence.append(c);
+//                if (c == '.' || c == '!' || c == '?') {
+//                    sentences.add(sentence.toString());
+//                    sentence = new StringBuilder();
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return sentences;
+//    }
 
     private boolean checkSentence(String sentence) {
         List<String> words = Arrays.asList(sentence.replaceAll("\\pP", "").split(" "));
         return words.contains(word);
     }
-
-    /**
-     * Записывает в файл найденное предложение.
-     *
-     * @param sentence предложение, в котором содержится искомое слово
-     */
-    private void writeFile(String sentence) {
-        sentence = sentence.trim() + System.lineSeparator();
-        try (Writer writer = new FileWriter(filename, true)) {
-            synchronized (WordChecker.class) {
-                writer.write(sentence);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//
+//    /**
+//     * Записывает в файл найденное предложение.
+//     *
+//     * @param sentence предложение, в котором содержится искомое слово
+//     */
+//    private void writeFile(String sentence) {
+//        sentence = sentence.trim() + System.lineSeparator();
+//        try (Writer writer = new FileWriter(filename, true)) {
+//            synchronized (WordChecker.class) {
+//                writer.write(sentence);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

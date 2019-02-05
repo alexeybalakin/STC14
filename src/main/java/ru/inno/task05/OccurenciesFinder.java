@@ -18,6 +18,13 @@ public class OccurenciesFinder {
      * Имя файла с результатами поиска.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(OccurenciesFinder.class);
+    private SentenceWriter writer;
+    private ResourceParser parser;
+
+    public OccurenciesFinder(ResourceParser parser, SentenceWriter writer) {
+        this.writer = writer;
+        this.parser = parser;
+    }
 
     /**
      * В многопоточном режиме ищет слова в массиве текстовых ресурсов.
@@ -35,7 +42,7 @@ public class OccurenciesFinder {
         ExecutorService service = Executors.newFixedThreadPool(100);
         for (String word : words) {
             for (String source : sources) {
-                service.execute(new Thread(new WordChecker(source, word, res)));
+                service.execute(new Thread(new WordChecker(source, word, res, parser, writer)));
             }
         }
         service.shutdown();

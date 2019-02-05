@@ -9,7 +9,9 @@ public class Main {
             sources[i] = "c:/temp/task05/" + i + ".txt";
         }
         String res = "c:/temp/task05/found.txt";
-        OccurenciesFinder finder = new OccurenciesFinder();
+        ResourceParser parser = new FileResourceParser();
+        SentenceWriter writer = new FileSentenceWriter();
+        OccurenciesFinder finder = new OccurenciesFinder(parser, writer);
         finder.getOccurencies(sources, words, res);
     }
 }
