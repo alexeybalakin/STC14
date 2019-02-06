@@ -12,13 +12,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class OccurenciesFinderTest {
-    @Mock private ResourceParser parser;
-    @Mock private SentenceWriter writer;
+    private static final String[] SENTENCES = {"Doing Test", "Let's do it", "Test test test"};
+    private static final String[] WORDS = {"test"};
+    private static final String RESULT = "res";
+    private static final String[] SOURCES = {"someFile.txt"};
+    @Mock
+    private ResourceParser parser;
+    @Mock
+    private SentenceWriter writer;
     private OccurenciesFinder occurenciesFinder;
-    private String[] sentences = {"Doing Test", "Let's do it", "Test test test"};
-    private String[] words = {"Test"};
-    private String result = "res";
-    private String[] sources = {"someFile.txt", "someFile2.txt", "someFile3.txt"};
 
     @BeforeEach
     void setUp() {
@@ -27,10 +29,18 @@ class OccurenciesFinderTest {
     }
 
     @Test
-    void getOccurencies() {
-        when(parser.getSentences(sources[0])).thenReturn(new HashSet<>(Arrays.asList(sentences)));
-        occurenciesFinder.getOccurencies(sources, words, result);
-        verify(writer).writeSentence("Doing Test",result);
-        verify(writer).writeSentence("Test test test",result);
+    void getOccurenciesFindWordTest() {
+        when(parser.getSentences(anyString())).thenReturn(new HashSet<>(Arrays.asList(SENTENCES)));
+        occurenciesFinder.getOccurencies(SOURCES, WORDS, RESULT);
+        verify(writer).writeSentence(eq("Doing Test"), anyString());
+        verify(writer).writeSentence(eq("Test test test"), anyString());
+        verify(writer, times(0)).writeSentence(eq("Let's do it"), anyString());
+    }
+
+    @Test
+    void getOccurenciesNullTest() {
+        assertDoesNotThrow(() -> occurenciesFinder.getOccurencies(null, WORDS, RESULT));
+        assertDoesNotThrow(() -> occurenciesFinder.getOccurencies(SOURCES, null, RESULT));
+        assertDoesNotThrow(() -> occurenciesFinder.getOccurencies(SOURCES, WORDS, null));
     }
 }

@@ -4,13 +4,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+/**
+ * Реализация SentenceWriter для записи
+ * предлоежния в файл.
+ *
+ * @author Alexey Balakin
+ */
 public class FileSentenceWriter implements SentenceWriter {
 
     /**
      * Записывает в файл предложение.
      *
      * @param sentence предложение для записи
-     * @param resource имя ресурса для записи
+     * @param resource имя файла для записи
      */
     @Override
     public void writeSentence(String sentence, String resource) {

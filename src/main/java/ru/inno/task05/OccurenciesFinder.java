@@ -14,9 +14,6 @@ import java.util.concurrent.*;
  * @author Alexey Balakin
  */
 public class OccurenciesFinder {
-    /**
-     * Имя файла с результатами поиска.
-     */
     private static final Logger LOGGER = LoggerFactory.getLogger(OccurenciesFinder.class);
     private SentenceWriter writer;
     private ResourceParser parser;
@@ -31,28 +28,32 @@ public class OccurenciesFinder {
      *
      * @param sources текстовые ресурсы
      * @param words   искомые слова
-     * @param res     имя файла с результатами
+     * @param res     имя ресурса с результатами
      */
     public void getOccurencies(String[] sources, String[] words, String res) {
-        long startTime = System.currentTimeMillis();
-        File file = new File(res);
-        if (file.exists()) {
-            file.delete();
-        }
-        ExecutorService service = Executors.newFixedThreadPool(100);
-        for (String word : words) {
-            for (String source : sources) {
-                service.execute(new Thread(new WordChecker(source, word, res, parser, writer)));
+        if (sources != null && words != null && res != null) {
+            long startTime = System.currentTimeMillis();
+            File file = new File(res);
+            if (file.exists()) {
+                file.delete();
             }
-        }
-        service.shutdown();
-        while (!service.isTerminated()){
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                LOGGER.error("thread was interrupted " + e);
+            ExecutorService service = Executors.newFixedThreadPool(100);
+            for (String word : words) {
+                for (String source : sources) {
+                    service.execute(new Thread(new WordChecker(source, word, res, parser, writer)));
+                }
             }
-        };
-        LOGGER.info("Потрачено: " + ((System.currentTimeMillis() - startTime) / 1000d) + "s");
+            service.shutdown();
+            while (!service.isTerminated()) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    LOGGER.error("thread was interrupted " + e);
+                }
+            }
+            LOGGER.info("Потрачено: " + ((System.currentTimeMillis() - startTime) / 1000d) + "s");
+        } else {
+            LOGGER.warn("Входные параметры getOccurencies() не должны содержать null");
+        }
     }
 }
